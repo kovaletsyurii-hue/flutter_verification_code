@@ -223,8 +223,8 @@ class _VerificationCodeState extends State<VerificationCode> {
     for (int index = 0; index < widget.length; index++) {
       double left = (index == 0) ? 0.0 : (widget.itemWidth / 10);
       listWidget.add(Container(
-          height: widget.itemWidth,
-          width: widget.itemHeight,
+          height: widget.itemHeight,
+          width: widget.itemWidth,
           margin: EdgeInsets.only(left: left),
           child: _buildInputItem(index)));
     }
