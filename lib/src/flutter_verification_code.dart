@@ -14,8 +14,17 @@ class VerificationCode extends StatefulWidget {
   /// quantity of boxes
   final int length;
 
-  /// size of box for code
+  /// size of box for code //deprecated
   final double itemSize;
+
+  /// width of each box for code
+  final double itemWidth;
+
+  /// height of each box for code
+  final double itemHeight;
+
+  /// horizontal margin for each box
+  final double? itemHorizontalOffset;
 
   /// the color for underline, in case underline color is null it will use primaryColor from Theme
   final Color? underlineColor;
@@ -53,6 +62,8 @@ class VerificationCode extends StatefulWidget {
     this.keyboardType = TextInputType.number,
     this.length = 4,
     this.itemSize = 50,
+    this.itemWidth = 50,
+    this.itemHeight = 70,
     this.underlineColor,
     this.underlineUnfocusedColor,
     this.fillColor,
@@ -63,7 +74,9 @@ class VerificationCode extends StatefulWidget {
     this.isSecure = false,
     this.digitsOnly = false,
     this.decoration,
+    this.itemHorizontalOffset,
   });
+
 
   @override
   _VerificationCodeState createState() => _VerificationCodeState();
@@ -103,6 +116,26 @@ class _VerificationCodeState extends State<VerificationCode> {
   }
 
   Widget _buildInputItem(int index) {
+    ///could be deprecated or refactored in future
+    final InputDecoration defaultInputDecoration = InputDecoration(
+      fillColor: widget.fillColor,
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: widget.underlineUnfocusedColor ?? Colors.grey,
+          width: widget.underlineWidth ?? 1,
+        ),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: widget.underlineColor ?? Theme.of(context).primaryColor,
+          width: widget.underlineWidth ?? 1,
+        ),
+      ),
+      counterText: "",
+      contentPadding: EdgeInsets.all(widget.itemHorizontalOffset ?? ((widget.itemWidth * 2) / 10)),
+      errorMaxLines: 1,
+    );
+
     return RawKeyboardListener(
       focusNode: _listFocusNodeKeyListener[index],
       onKey: (event) {
@@ -129,24 +162,7 @@ class _VerificationCodeState extends State<VerificationCode> {
         textAlign: TextAlign.center,
         autofocus: widget.autofocus,
         style: widget.textStyle,
-        decoration: widget.decoration ?? InputDecoration(
-          fillColor: widget.fillColor,
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: widget.underlineUnfocusedColor ?? Colors.grey,
-              width: widget.underlineWidth ?? 1,
-            ),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: widget.underlineColor ?? Theme.of(context).primaryColor,
-              width: widget.underlineWidth ?? 1,
-            ),
-          ),
-          counterText: "",
-          contentPadding: EdgeInsets.all(((widget.itemSize * 2) / 10)),
-          errorMaxLines: 1,
-        ),
+        decoration: widget.decoration ?? defaultInputDecoration,
         //      textInputAction: TextInputAction.previous,
         onChanged: (String value) {
           if ((_currentIndex + 1) == widget.length && value.length > 0) {
@@ -205,10 +221,10 @@ class _VerificationCodeState extends State<VerificationCode> {
   List<Widget> _buildListWidget() {
     List<Widget> listWidget = [];
     for (int index = 0; index < widget.length; index++) {
-      double left = (index == 0) ? 0.0 : (widget.itemSize / 10);
+      double left = (index == 0) ? 0.0 : (widget.itemWidth / 10);
       listWidget.add(Container(
-          height: widget.itemSize,
-          width: widget.itemSize,
+          height: widget.itemWidth,
+          width: widget.itemHeight,
           margin: EdgeInsets.only(left: left),
           child: _buildInputItem(index)));
     }
