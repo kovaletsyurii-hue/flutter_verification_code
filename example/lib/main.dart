@@ -74,6 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
               });
               if (!_onEditing) FocusScope.of(context).unfocus();
             },
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.red, width: 1.0),
+              ),
+                contentPadding: EdgeInsets.all(12.0)
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),

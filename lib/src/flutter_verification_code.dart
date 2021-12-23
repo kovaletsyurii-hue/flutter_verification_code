@@ -44,6 +44,9 @@ class VerificationCode extends StatefulWidget {
   ///accept only digit inputs from keyboard
   final bool digitsOnly;
 
+  ///allow add custom decorations for each input
+  InputDecoration? decoration;
+
   VerificationCode({
     required this.onCompleted,
     required this.onEditing,
@@ -59,6 +62,7 @@ class VerificationCode extends StatefulWidget {
     this.clearAll,
     this.isSecure = false,
     this.digitsOnly = false,
+    this.decoration,
   });
 
   @override
@@ -125,7 +129,7 @@ class _VerificationCodeState extends State<VerificationCode> {
         textAlign: TextAlign.center,
         autofocus: widget.autofocus,
         style: widget.textStyle,
-        decoration: InputDecoration(
+        decoration: widget.decoration ?? InputDecoration(
           fillColor: widget.fillColor,
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
