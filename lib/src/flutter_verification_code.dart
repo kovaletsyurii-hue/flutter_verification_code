@@ -56,6 +56,9 @@ class VerificationCode extends StatefulWidget {
   ///allow add custom decorations for each input
   InputDecoration? decoration;
 
+  ///disabled
+  final bool disabled;
+
   VerificationCode({
     required this.onCompleted,
     required this.onEditing,
@@ -75,6 +78,7 @@ class VerificationCode extends StatefulWidget {
     this.digitsOnly = false,
     this.decoration,
     this.itemHorizontalOffset,
+    this.disabled = false
   });
 
 
@@ -147,53 +151,58 @@ class _VerificationCodeState extends State<VerificationCode> {
           }
         }
       },
-      child: TextField(
-        keyboardType: widget.keyboardType,
-        inputFormatters: widget.digitsOnly
-            ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
-            : null,
-        maxLines: 1,
-        maxLength: widget.length - index,
-        controller: _listControllerText[index],
-        focusNode: _listFocusNode[index],
-        showCursor: true,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        autocorrect: false,
-        textAlign: TextAlign.center,
-        autofocus: widget.autofocus,
-        style: widget.textStyle,
-        decoration: widget.decoration ?? defaultInputDecoration,
-        //      textInputAction: TextInputAction.previous,
-        onChanged: (String value) {
-          if ((_currentIndex + 1) == widget.length && value.length > 0) {
-            widget.onEditing(false);
-          } else {
-            widget.onEditing(true);
-          }
-
-          if (value.length == 0 && index >= 0) {
-            _prev(index);
-            return;
-          }
-
-          if (value.length > 0) {
-            String _value = value;
-            int _index = index;
-
-            while (_value.length > 0 && _index < widget.length) {
-              _listControllerText[_index].value =
-                  TextEditingValue(text: _value[0]);
-              _next(_index++);
-              _value = _value.substring(1);
-            }
-
-            if (_listControllerText[widget.length - 1].value.text.length == 1 &&
-                _getInputVerify().length == widget.length) {
+      child: Opacity(
+        opacity: widget.disabled ? 0.5 : 1,
+        child: TextField(
+          readOnly: widget.disabled,
+          enabled: !widget.disabled,
+          keyboardType: widget.keyboardType,
+          inputFormatters: widget.digitsOnly
+              ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+              : null,
+          maxLines: 1,
+          maxLength: widget.length - index,
+          controller: _listControllerText[index],
+          focusNode: _listFocusNode[index],
+          showCursor: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          autocorrect: false,
+          textAlign: TextAlign.center,
+          autofocus: widget.autofocus,
+          style: widget.textStyle,
+          decoration: widget.decoration ?? defaultInputDecoration,
+          //      textInputAction: TextInputAction.previous,
+          onChanged: (String value) {
+            if ((_currentIndex + 1) == widget.length && value.length > 0) {
               widget.onEditing(false);
-              widget.onCompleted(_getInputVerify());
+            } else {
+              widget.onEditing(true);
             }
-          }
-        },
+
+            if (value.length == 0 && index >= 0) {
+              _prev(index);
+              return;
+            }
+
+            if (value.length > 0) {
+              String _value = value;
+              int _index = index;
+
+              while (_value.length > 0 && _index < widget.length) {
+                _listControllerText[_index].value =
+                    TextEditingValue(text: _value[0]);
+                _next(_index++);
+                _value = _value.substring(1);
+              }
+
+              if (_listControllerText[widget.length - 1].value.text.length == 1 &&
+                  _getInputVerify().length == widget.length) {
+                widget.onEditing(false);
+                widget.onCompleted(_getInputVerify());
+              }
+            }
+          },
+        ),
       ),
     );
   }

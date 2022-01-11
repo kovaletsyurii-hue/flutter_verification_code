@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           primarySwatch: Colors.green,
-          primaryColor: Colors.red,
+          primaryColor: Colors.blue,
           accentColor: Colors.orange,
           hintColor: Colors.green),
       home: MyHomePage(),
@@ -75,14 +75,20 @@ class _MyHomePageState extends State<MyHomePage> {
               if (!_onEditing) FocusScope.of(context).unfocus();
             },
             decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red, width: 1.0),
-              ),
-                contentPadding: EdgeInsets.all(12.0)
-            ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                contentPadding: EdgeInsets.all(12.0)),
+            disabled: _code != null && _code.length > 3,
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
